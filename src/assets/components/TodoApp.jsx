@@ -1,38 +1,55 @@
-import { useState } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { db } from "../../../firebase.config"
-import { collection, addDoc } from "firebase/firestore"
-import AddTask from "./assets/components/AddTask"
-import TaskContainer from "./assets/components/TaskList"
-
+import { collection, deleteDoc, doc, getDocs, updateDoc, addDoc } from "firebase/firestore"
+import AddTodo from "./AddTodo"
+import TodoContainer from "./TodoList"
 
 const TodoApp = () => {
-  const [tasks, setTasks] = useState([])
+  const [todos, setTodos] = useState([])
+  const todosRef = useMemo(() => collection(db, "todos")) 
 
-  const handleAddTask = async (e) => {
-    e.preventDefault()
-    if(newTask !== ""){
-      await addDoc(collection(db, "tasks"), {
-        newTask,
-        isDone: false
-      })
-      setNewTask('')
+  useEffect(() => {
+    const getTodos = async () => {
+      try {
+        const data = await getDocs(todosRef)
+        const filtered = data.docs.map((doc) => (
+          {...doc.data(), id: doc.id}
+        ))
+        setTodos(filtered)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    getTodos()
+  }, [])
+
+  const handleAddTodo = async (title) => {
+    if(title !== ""){
+      await addDoc(todosRef, {title: title})
     }
   }
 
-  const handleChangeTask = () => {
-
+  const handleChangeTodo = async(todo, title) => {
+    await updateDoc(doc(db, "todos", todo.id), {title: title})
   }
 
-  const handleDeleteTask = (todoId) => {
-    if(todoId !== )
+  const handleDeleteTodo = async (id) => {
+    await deleteDoc(doc(db, "todos", id))
   }
   return(
     <>
-      <AddTask />
-      <TaskContainer 
-        tasks={tasks}
-        changeTask={}
+      <AddTodo 
+        onAddTodo={handleAddTodo}
       />
+      <div>
+        <TodoContainer 
+          todos={todos}
+          changeTodo={handleChangeTodo}
+          deleteTodo={handleDeleteTodo}
+        />
+      </div>
     </>
   )
 }
+
+export default TodoApp

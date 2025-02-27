@@ -1,41 +1,37 @@
 import { useState } from "react"
 import { db } from "../../../firebase.config"
 
-const Task = ({task, onEditTask, onDeleteTask}) => {
+const Todo = ({todo, onEditTodo, onDeleteTodo}) => {
   const [isEdit, setIsEdit] = useState(false)
-  let taskContent
+  let todoContent
 
   if(isEdit){
-    taskContent = (
+    todoContent = (
       <>
         <input 
           type="text" 
-          value={task.title}
+          value={todo.title}
           onChange={(e) => {
-            onEditTask({...task, title: e.target.value})
+            onEditTodo({...todo, title: e.target.value})
           }}
         />
         <button onClick={() => setIsEdit(false)}>Save</button>
       </>
     ) 
   } else{
-    taskContent = (
+    todoContent = (
       <>
-        {task.title}
+        {todo.title}
         <button onClick={() => setIsEdit(true)}>Edit</button>
       </>
     )
   }
   return(
     <label>
-      <input type="checkbox" 
-        checked={todo.isDone}
-        onChange={(e) => e.target.checked}
-      />
-      {taskContent}
-      <button onClick={() => onDeleteTask(task.id)}>Delete</button>
+      {todoContent}
+      <button onClick={() => onDeleteTodo(todo.id)}>Delete</button>
     </label>
   )
 }
 
-export default Task
+export default Todo
