@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { db } from "../../../firebase.config"
 
 const Todo = ({todo, onEditTodo, onDeleteTodo}) => {
   const [isEdit, setIsEdit] = useState(false)
@@ -26,10 +25,11 @@ const Todo = ({todo, onEditTodo, onDeleteTodo}) => {
       </>
     )
   }
+  
   return(
     <label>
       {todoContent}
-      <button onClick={() => onDeleteTodo(todo.id)}>Delete</button>
+      <button onClick={() => onDeleteTodo}>Delete</button>
     </label>
   )
 }

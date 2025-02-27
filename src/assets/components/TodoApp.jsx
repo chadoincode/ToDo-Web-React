@@ -6,7 +6,7 @@ import TodoContainer from "./TodoList"
 
 const TodoApp = () => {
   const [todos, setTodos] = useState([])
-  const todosRef = useMemo(() => collection(db, "todos")) 
+  const todosRef = useMemo(() => collection(db, "todos"), []) 
 
   useEffect(() => {
     const getTodos = async () => {

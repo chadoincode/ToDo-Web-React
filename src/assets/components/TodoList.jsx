@@ -9,7 +9,7 @@ const TodoContainer = ({ todos, changeTodo, deleteTodo }) => {
             <Todo
               todo={todo}
               onEditTodo={changeTodo}
-              onDeleteTodo={deleteTodo}
+              onDeleteTodo={deleteTodo(todo.id)}
             />
           </li>
         ))}
