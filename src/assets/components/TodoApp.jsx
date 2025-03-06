@@ -6,8 +6,9 @@ import TodoContainer from "./TodoList"
 
 const TodoApp = () => {
   const [todos, setTodos] = useState([])
-  const todosRef = useMemo(() => collection(db, "todos"), []) 
+  const todosRef = useMemo(() => collection(db, "todos"), [db]) 
 
+  
   useEffect(() => {
     const getTodos = async () => {
       try {
@@ -15,17 +16,21 @@ const TodoApp = () => {
         const filtered = data.docs.map((doc) => (
           {...doc.data(), id: doc.id}
         ))
+        
         setTodos(filtered)
       } catch (err) {
         console.error(err)
       }
     }
+   
     getTodos()
   }, [])
 
   const handleAddTodo = async (title) => {
-    if(title !== ""){
+    try {
       await addDoc(todosRef, {title: title})
+    } catch (err) {
+      console.error(err)
     }
   }
 
